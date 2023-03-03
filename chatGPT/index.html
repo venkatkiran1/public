@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Flask App</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>My Flask App</h1>
+      <form id="prompt-form" method="post" action="/prompt">
+        <div class="form-group">
+          <label for="prompt-text">Enter your prompt:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="prompt-text"
+            name="prompt-text"
+            placeholder="Enter text"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <br />
+      <div id="response-container"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        // Handle form submission
+        $("#prompt-form").submit(function (event) {
+          // Prevent form from submitting normally
+          event.preventDefault();
+
+          // Get the prompt text from the input field
+          var promptText = $("#prompt-text").val();
+
+          // Check if the prompt text is not empty
+          if (promptText) {
+            // Send a POST request to the /prompt route
+            axios
+              .post("/prompt", {
+                prompt: promptText,
+              })
+              .then(function (response) {
+                // Display the response in the response container
+                $("#response-container").text(response.data.response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
